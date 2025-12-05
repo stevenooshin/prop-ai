@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prop-AI | Creative Strategy Deck</title>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --primary: #0066FF; /* Prop-AI Blue */
+            --accent: #00FF94; /* Matrix/Data Green */
+            --dark: #0A0A0A;
+            --light: #F5F5F5;
+            --glass: rgba(255, 255, 255, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--dark);
+            color: var(--light);
+            overflow-x: hidden;
+        }
+
+        /* Matrix Background Effect */
+        #canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.15;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4 {
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Layout */
+        section {
+            min-height: 100vh;
+            padding: 4rem 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            align-items: center;
+        }
+
+        .logo-container {
+            margin-bottom: 2rem;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            color: #888;
+            max-width: 600px;
+        }
+
+        /* Cards */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            width: 100%;
+            margin-top: 3rem;
+        }
+
+        .card {
+            background: var(--glass);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px rgba(0, 102, 255, 0.1);
+        }
+
+        /* Content Timeline */
+        .timeline-container {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .day-row {
+            display: flex;
+            margin-bottom: 1.5rem;
+            background: var(--glass);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .day-row:hover {
+            border-color: var(--accent);
+            transform: translateX(10px);
+        }
+
+        .day-marker {
+            background: var(--primary);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-width: 80px;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .day-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            width: fit-content;
+        }
+
+        .tag.awakening { background: rgba(0, 102, 255, 0.2); color: #4DA3FF; }
+        .tag.lifestyle { background: rgba(0, 255, 148, 0.2); color: #00FF94; }
+        .tag.cgi { background: rgba(255, 0, 148, 0.2); color: #FF0094; }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            margin-top: 2rem;
+            transition: transform 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            background: #0052cc;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 4rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            background: #050505;
+        }
+
+        .contact-link {
+            color: var(--light);
+            text-decoration: none;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .contact-link:hover {
+            color: var(--accent);
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            section { padding: 2rem 1rem; }
+            .day-row { flex-direction: column; }
+            .day-marker { flex-direction: row; width: 100%; padding: 0.5rem; justify-content: flex-start; gap: 1rem; }
+        }
+        
+        .code-snippet {
+            font-family: 'Courier New', monospace;
+            color: var(--accent);
+            background: rgba(0,0,0,0.5);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .phase-header {
+            margin: 3rem 0 1.5rem;
+            border-bottom: 1px solid var(--accent);
+            padding-bottom: 0.5rem;
+            display: block;
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="canvas"></canvas>
+
+    <!-- 1. Hero Section -->
+    <section class="hero" id="home">
+        <div class="logo-container">
+            <!-- Increased Width to ensure "AI" is visible -->
+            <svg width="300" height="70" viewBox="0 0 300 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M45 15 L65 15 L55 55 L35 55 Z" fill="#0066FF"/>
+                <path d="M35 15 L55 15 L45 55 L25 55 Z" fill="white" fill-opacity="0.2"/>
+                <text x="80" y="50" font-family="Arial, sans-serif" font-weight="bold" font-size="38" fill="white" letter-spacing="2">PROP-AI</text>
+            </svg>
+        </div>
+        <h1 class="gsap-reveal">Real Estate. <br>Reimagined by <span class="gradient-text">Intelligence</span>.</h1>
+        <p class="gsap-reveal">Creative GTM Strategy & 14-Day Content Plan <br>Prepared by Steve Nooshinfar</p>
+        <button class="btn gsap-reveal" onclick="document.getElementById('strategy').scrollIntoView({behavior: 'smooth'})">Initialize Strategy</button>
+    </section>
+
+    <!-- 2. The Core Concept -->
+    <section id="strategy">
+        <h2 class="gradient-text">Strategic Vision</h2>
+        <div class="grid">
+            <div class="card">
+                <i data-lucide="zap" color="#00FF94" size="32"></i>
+                <h3 style="margin: 1rem 0;">The Noise</h3>
+                <p>The Dubai market is loud. Buyers are bombarded with "salesman fluff," outdated brochures, and aggressive calls. Trust is low.</p>
+            </div>
+            <div class="card">
+                <i data-lucide="brain-circuit" color="#0066FF" size="32"></i>
+                <h3 style="margin: 1rem 0;">The Intelligence</h3>
+                <p>Modern investors want clarity. They trust <strong>data</strong>. Prop-AI is the superpower that lets them see the financial truth.</p>
+            </div>
+            <div class="card">
+                <i data-lucide="pill" color="#FF4D4D" size="32"></i>
+                <h3 style="margin: 1rem 0;">The Hook: "Red Pill"</h3>
+                <p>We position Prop-AI not as a broker, but as the <strong>Source of Truth</strong>. The Red Pill reveals the code behind the concrete.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Video Assets -->
+    <section id="video-assets">
+        <h2 class="gradient-text" style="margin-bottom: 2rem;">Visual Assets</h2>
+        
+        <div style="background: var(--glass); padding: 2rem; border-radius: 16px; margin-bottom: 2rem; border-left: 4px solid var(--primary);">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h3>Asset 1: "The X-Ray Vision" (20s Ad)</h3>
+                <span class="tag awakening">Traffic Driver</span>
+            </div>
+            <p style="margin-top: 0.5rem; color: #aaa;"><strong>Concept:</strong> A fast-paced visual hook contrasting "Blind Buying" vs. "Data Clarity".</p>
+            <div class="grid" style="margin-top: 1rem;">
+                <div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px;">
+                    <strong>0:00 - The Hook</strong><br>Flashy Agent vs. Blindfolded Buyer. <br><em>"Selling you a dream?"</em>
+                </div>
+                <div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px;">
+                    <strong>0:05 - The Reveal</strong><br>House transforms into digital wireframe. <br><em>HUD: "Real ROI: 8%"</em>
+                </div>
+                <div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px;">
+                    <strong>0:15 - The CTA</strong><br>Prop-AI Dashboard. <br><em>"Invest Smarter."</em>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: var(--glass); padding: 2rem; border-radius: 16px; border-left: 4px solid var(--accent);">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h3>Asset 2: "The Red Pill" (60s Storyboard)</h3>
+                <span class="tag lifestyle">Trust Builder</span>
+            </div>
+            <div style="margin-top: 1rem;">
+                <p><strong>Synopsis:</strong> James and Sarah are drowning in the chaos of aggressive brokers (The Matrix). A sleek Prop-AI advisor offers a choice: The Blue Pill (Hype) or The Red Pill (Data). They choose Red, and the world glitches into code, revealing the calm, data-driven truth of the Prop-AI platform.</p>
+                <div class="code-snippet">
+                    > SYSTEM ALERT: MARKET NOISE DETECTED<br>
+                    > INITIATE SEQUENCE: TRUTH_FILTER.EXE<br>
+                    > LOADING ASSET: MATRIX_AGENT_POV<br>
+                    > TRANSITION: GREEN_CODE_WIPE -> LUXURY_OFFICE<br>
+                    > STATUS: CLARITY ACHIEVED
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. 14-Day Content Plan -->
+    <section id="content-plan">
+        <h2>14-Day Content <span class="gradient-text">Master Plan</span></h2>
+        <p style="margin-bottom: 3rem; color: #888;">A comprehensive rollout: Disruption, Education, Viral CGI, and Conversion.</p>
+
+        <div class="timeline-container">
+            
+            <h3 class="phase-header" style="color: var(--primary);">Week 1: The Awakening (Disrupt & Attract)</h3>
+
+            <!-- Day 1 -->
+            <div class="day-row">
+                <div class="day-marker">01</div>
+                <div class="day-content">
+                    <span class="tag awakening">Viral Hook</span>
+                    <h4>The Choice (Red Pill vs Blue Pill)</h4>
+                    <p>Visual: Agent holding Blue Brochure (Hype) vs. Red Pill (Data). "Stop buying the hype."</p>
+                    <small style="color: #888;">IG Reels, TikTok | Sound: Matrix Theme</small>
+                </div>
+            </div>
+
+            <!-- Day 2 -->
+            <div class="day-row">
+                <div class="day-marker">02</div>
+                <div class="day-content">
+                    <span class="tag awakening">Problem Aware</span>
+                    <h4>The Glitch</h4>
+                    <p>Visual: Rapid cuts of messy flyers/confused buyers -> Green code clears screen to reveal Prop-AI UI.</p>
+                    <small style="color: #888;">TikTok, Stories</small>
+                </div>
+            </div>
+
+            <!-- Day 3 -->
+            <div class="day-row">
+                <div class="day-marker">03</div>
+                <div class="day-content">
+                    <span class="tag awakening">Solution</span>
+                    <h4>Welcome to Reality</h4>
+                    <p>Visual: Transition from chaos to the calm, white Prop-AI office. "No salespeople. Just clarity."</p>
+                    <small style="color: #888;">IG Reel</small>
+                </div>
+            </div>
+
+            <!-- Day 4 -->
+            <div class="day-row">
+                <div class="day-marker">04</div>
+                <div class="day-content">
+                    <span class="tag awakening">Education</span>
+                    <h4>The Vision</h4>
+                    <p>Visual: Agent showing monitor with the Villa on screen. "AI analyzes 10k properties to find YOURS."</p>
+                    <small style="color: #888;">LinkedIn Carousel</small>
+                </div>
+            </div>
+
+            <!-- Day 5 -->
+            <div class="day-row">
+                <div class="day-marker">05</div>
+                <div class="day-content">
+                    <span class="tag awakening">Before/After</span>
+                    <h4>The Transformation</h4>
+                    <p>Visual: Split screen. Top: Stressful search. Bottom: Relaxing on luxury balcony with Prop-AI.</p>
+                    <small style="color: #888;">TikTok Transition Trend</small>
+                </div>
+            </div>
+
+            <!-- Day 6 -->
+            <div class="day-row">
+                <div class="day-marker">06</div>
+                <div class="day-content">
+                    <span class="tag awakening">Authority</span>
+                    <h4>The Unfair Advantage (Static)</h4>
+                    <p>Visual: Glowing AR graphic over a villa showing "+15% Projected Growth". "Beauty is subjective. ROI is not."</p>
+                    <small style="color: #888;">LinkedIn, IG Post</small>
+                </div>
+            </div>
+
+            <!-- Day 7 -->
+            <div class="day-row">
+                <div class="day-marker">07</div>
+                <div class="day-content">
+                    <span class="tag awakening">Engagement</span>
+                    <h4>The Meme / Q&A</h4>
+                    <p>Visual: Agent looking stoic. Text: "When they ask if the flyer price is real."</p>
+                    <small style="color: #888;">Stories, Twitter/X</small>
+                </div>
+            </div>
+
+            <h3 class="phase-header" style="color: var(--accent);">Week 2: The Lifestyle (Viral CGI & Convert)</h3>
+
+            <!-- Day 8 -->
+            <div class="day-row">
+                <div class="day-marker">08</div>
+                <div class="day-content">
+                    <span class="tag lifestyle">Emotion</span>
+                    <h4>Night Mode</h4>
+                    <p>Visual: Cozy night shot, Christmas tree, couple looking out window. "Data driven, heart centered."</p>
+                    <small style="color: #888;">Pinterest, IG Aesthetic</small>
+                </div>
+            </div>
+
+            <!-- Day 9 -->
+            <div class="day-row">
+                <div class="day-marker">09</div>
+                <div class="day-content">
+                    <span class="tag lifestyle">FOMO</span>
+                    <h4>The View</h4>
+                    <p>Visual: Over-the-shoulder POV looking out at Dubai skyline. "Your morning coffee could look like this."</p>
+                    <small style="color: #888;">Reels, Shorts</small>
+                </div>
+            </div>
+
+            <!-- Day 10 -->
+            <div class="day-row">
+                <div class="day-marker">10</div>
+                <div class="day-content">
+                    <span class="tag lifestyle">Trust</span>
+                    <h4>The Agent (AI vs Broker)</h4>
+                    <p>Visual: Close up of AI Agent. "I don't sleep. I don't take commissions. I just find deals."</p>
+                    <small style="color: #888;">YouTube Short</small>
+                </div>
+            </div>
+
+            <!-- Day 11 -->
+            <div class="day-row">
+                <div class="day-marker">11</div>
+                <div class="day-content">
+                    <span class="tag lifestyle">Luxury</span>
+                    <h4>The Exterior</h4>
+                    <p>Visual: Wide shot of luxury modern villa in Dubai. "Modern. Minimalist. Magnificent."</p>
+                    <small style="color: #888;">IG Carousel</small>
+                </div>
+            </div>
+
+            <!-- Day 12 (CGI) -->
+            <div class="day-row" style="border-color: #FF0094;">
+                <div class="day-marker" style="background: #FF0094;">12</div>
+                <div class="day-content">
+                    <span class="tag cgi">Viral CGI Moment</span>
+                    <h4>Prop-AI Takeover</h4>
+                    <p><strong>Visual:</strong> A giant, hyper-realistic 3D metallic Prop-AI balloon/orb floating serenely next to the Burj Khalifa. It glows with data streams. "The Future is Here."</p>
+                    <small style="color: #888;">All Platforms (Viral Strategy)</small>
+                </div>
+            </div>
+
+            <!-- Day 13 -->
+            <div class="day-row">
+                <div class="day-marker">13</div>
+                <div class="day-content">
+                    <span class="tag lifestyle">Social Proof</span>
+                    <h4>Success Story</h4>
+                    <p>Visual: James and Sarah smiling in the office. "They stopped searching and started living."</p>
+                    <small style="color: #888;">Testimonial Reel</small>
+                </div>
+            </div>
+
+            <!-- Day 14 -->
+            <div class="day-row">
+                <div class="day-marker">14</div>
+                <div class="day-content">
+                    <span class="tag lifestyle">Conversion</span>
+                    <h4>The Final Call</h4>
+                    <p>Visual: Fast montage of days 1-13 ending on Logo. "The Red Pill is waiting. Link in Bio."</p>
+                    <small style="color: #888;">Hard Sell / CTA</small>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="logo-container">
+            <!-- Increased Width to ensure "AI" is visible here too -->
+            <svg width="250" height="60" viewBox="0 0 300 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M45 15 L65 15 L55 55 L35 55 Z" fill="#0066FF"/>
+                <path d="M35 15 L55 15 L45 55 L25 55 Z" fill="white" fill-opacity="0.2"/>
+                <text x="80" y="50" font-family="Arial" font-weight="bold" font-size="38" fill="white">PROP-AI</text>
+            </svg>
+        </div>
+        <h3 style="margin-bottom: 2rem;">Ready to take the Red Pill?</h3>
+        
+        <div style="display: flex; flex-direction: column; gap: 1rem; align-items: center; justify-content: center; margin-bottom: 3rem;">
+            <div style="font-size: 1.2rem; font-weight: bold; color: var(--accent);">Steve Nooshinfar</div>
+            <div style="color: #888;">Creative Manager Candidate</div>
+        </div>
+
+        <div style="display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap;">
+            <a href="mailto:steve.nooshinfar@gmail.com" class="contact-link">
+                <i data-lucide="mail"></i> steve.nooshinfar@gmail.com
+            </a>
+            <a href="https://www.linkedin.com/in/steve-nooshinfar/" target="_blank" class="contact-link">
+                <i data-lucide="linkedin"></i> LinkedIn Profile
+            </a>
+            <a href="https://wa.me/971562450103" target="_blank" class="contact-link">
+                <i data-lucide="message-circle"></i> +971 56 245 0103
+            </a>
+        </div>
+        
+        <div style="margin-top: 3rem; opacity: 0.5; font-size: 0.8rem;">
+            <a href="#" style="color: white; text-decoration: none;">View GitHub Repo</a>
+        </div>
+    </footer>
+
+    <!-- Scripts moved to the end of body to ensure loading -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script>
+        // Check for GSAP availability before running animations
+        window.addEventListener('DOMContentLoaded', () => {
+            
+            // Matrix Rain Effect
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%";
+            const fontSize = 14;
+            const columns = canvas.width / fontSize;
+
+            const drops = [];
+            for (let x = 0; x < columns; x++) {
+                drops[x] = 1;
+            }
+
+            function draw() {
+                ctx.fillStyle = "rgba(10, 10, 10, 0.05)";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = "#00FF94"; // Matrix Green
+                ctx.font = fontSize + "px monospace";
+
+                for (let i = 0; i < drops.length; i++) {
+                    const text = letters.charAt(Math.floor(Math.random() * letters.length));
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
+                }
+            }
+
+            setInterval(draw, 33);
+
+            // GSAP Animations - Wrapped in check
+            if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+                gsap.registerPlugin(ScrollTrigger);
+
+                gsap.from(".hero h1", {
+                    duration: 1,
+                    y: 50,
+                    opacity: 0,
+                    ease: "power3.out",
+                    delay: 0.2
+                });
+
+                gsap.from(".hero p", {
+                    duration: 1,
+                    y: 30,
+                    opacity: 0,
+                    ease: "power3.out",
+                    delay: 0.4
+                });
+
+                gsap.from(".btn", {
+                    duration: 1,
+                    y: 30,
+                    opacity: 0,
+                    ease: "power3.out",
+                    delay: 0.6
+                });
+
+                // Animate Cards on Scroll
+                gsap.utils.toArray('.card').forEach((card, i) => {
+                    gsap.from(card, {
+                        scrollTrigger: {
+                            trigger: card,
+                            start: "top 85%",
+                        },
+                        y: 50,
+                        opacity: 0,
+                        duration: 0.8,
+                        delay: i * 0.1,
+                        ease: "power3.out"
+                    });
+                });
+
+                // Animate Timeline Items
+                gsap.utils.toArray('.day-row').forEach((row, i) => {
+                    gsap.from(row, {
+                        scrollTrigger: {
+                            trigger: row,
+                            start: "top 90%",
+                        },
+                        x: -50,
+                        opacity: 0,
+                        duration: 0.6,
+                        ease: "power2.out"
+                    });
+                });
+            } else {
+                console.warn("GSAP library not loaded correctly.");
+            }
+
+            // Icon Replacement
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+
+            // Window Resize Handler for Canvas
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+        });
+    </script>
+</body>
+</html>
